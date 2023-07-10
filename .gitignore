@@ -1,2 +1,2 @@
-./configs/mysql/data
-.logs
+./configs/mysql/data*
+.logs*
