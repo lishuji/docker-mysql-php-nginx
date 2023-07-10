@@ -1,0 +1,57 @@
+version: '2'
+
+networks:
+  app-network: 
+
+services:
+  my_db:
+    image: mysql:5.7
+    container_name: my_db
+    restart: always
+    ports:
+      - "3309:3306"
+    volumes:
+      - ./configs/mysql/mysqld.cnf:/etc/mysql/mysqld.cnf
+      - ./logs/mysql-log/logs:/var/log/mysql 
+      - ./configs/mysql/data:/var/lib/mysql 
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - app-network
+  my_redis:
+    image: redis
+    container_name: my_redis
+    restart: always
+    ports:
+      - "6399:6379"
+    networks:
+      - app-network
+  my_php:
+    image: php:8.1-fpm
+    container_name: my_php
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./www:/var/www/html
+      - ./configs/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+    links:
+      - my_db
+      - my_redis
+    networks:
+      - app-network 
+  my_nginx:
+    image: nginx
+    container_name: my_nginx
+    restart: always
+    ports:
+      - "8899:80"
+    links:
+      - my_php
+    volumes:
+      - ./www:/usr/share/nginx/html
+      - ./configs/nginx/ngixn.conf:/etc/nginx/ngixn.conf
+      - ./configs/nginx/conf.d://etc/nginx/conf.d
+      - ./logs/nginx-log:/var/log/nginx
+    networks:
+      - app-network
