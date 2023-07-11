@@ -13,9 +13,10 @@ services:
     volumes:
       - ./configs/mysql/mysqld.cnf:/etc/mysql/mysqld.cnf
       - ./logs/mysql-log/logs:/var/log/mysql 
-      - ./configs/mysql/data:/var/lib/mysql 
+      - ./configs/mysql/data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
+      - TZ=Asia/Shanghai
     networks:
       - app-network
   my_redis:
@@ -24,6 +25,8 @@ services:
     restart: always
     ports:
       - "6399:6379"
+    environment:
+      - TZ=Asia/Shanghai
     networks:
       - app-network
   my_php:
@@ -38,6 +41,8 @@ services:
     links:
       - my_db
       - my_redis
+    environment:
+      - TZ=Asia/Shanghai
     networks:
       - app-network 
   my_nginx:
@@ -51,7 +56,9 @@ services:
     volumes:
       - ./www:/usr/share/nginx/html
       - ./configs/nginx/ngixn.conf:/etc/nginx/ngixn.conf
-      - ./configs/nginx/conf.d://etc/nginx/conf.d
+      - ./configs/nginx/conf.d:/etc/nginx/conf.d
       - ./logs/nginx-log:/var/log/nginx
+    environment:
+      - TZ=Asia/Shanghai
     networks:
       - app-network
