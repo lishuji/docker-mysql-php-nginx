@@ -3,9 +3,7 @@
 .DS_Store
 
 # PHPStorm
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/dictionaries
+.idea/
 
 data/
 logs/
