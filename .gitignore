@@ -6,5 +6,6 @@
 .idea/
 
 data/
-logs/
+logs/mysql/
+logs/nginx/
 www/app/
