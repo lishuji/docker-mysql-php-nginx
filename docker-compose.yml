@@ -11,9 +11,7 @@ services:
     ports:
       - "3309:3306"
     volumes:
-      - ./configs/mysql/mysqld.cnf:/etc/mysql/mysqld.cnf
-      - ./logs/mysql-log/logs:/var/log/mysql 
-      - ./configs/mysql/data:/var/lib/mysql
+      - ./data/mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - TZ=Asia/Shanghai

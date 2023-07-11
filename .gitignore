@@ -1,3 +1,12 @@
-/configs/mysql/data/
-/logs/
-/www/
+# Global
+.*.swp
+.DS_Store
+
+# PHPStorm
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+
+data/
+logs/
+www/app/
