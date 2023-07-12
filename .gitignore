@@ -9,3 +9,4 @@ data/
 logs/mysql/
 logs/nginx/
 www/app/
+!configs/nginx/conf.d/default.conf

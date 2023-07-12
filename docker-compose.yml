@@ -38,8 +38,8 @@ services:
       - ./www:/var/www/html
       - ./configs/php/php.ini:/usr/local/etc/php/conf.d/php.ini
     links:
-      - my_db
-      - my_redis
+      - my_db:mysql
+      - my_redis:redis
     environment:
       - TZ=Asia/Shanghai
     networks:
@@ -51,7 +51,7 @@ services:
     ports:
       - "8899:80"
     links:
-      - my_php
+      - my_php:php
     volumes:
       - ./www:/usr/share/nginx/html
       - ./configs/nginx/ngixn.conf:/etc/nginx/ngixn.conf

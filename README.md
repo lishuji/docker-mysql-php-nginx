@@ -1,5 +1,5 @@
 # docker-mysql-php-nginx
-docker-mysql-php-nginx 容器化
+docker-mysql-php-nginx 容器化部署
 
 # 目录结构
 ```
