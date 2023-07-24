@@ -1,0 +1,18 @@
+version: '3.0'
+
+services:
+    redis:
+        container_name: docker-redis
+        build:
+          context: ./
+          dockerfile: Dockerfile
+          args:
+              - REDIS_VERSION=6.0.5
+        restart: always
+        ports:
+        - "6379:6379"
+        volumes:
+        - ./conf/redis.conf:/usr/local/etc/redis/redis.conf:rw
+        - ./data:/data:rw
+        - ./logs:/logs:rw
+        command: redis-server /usr/local/etc/redis/redis.conf
