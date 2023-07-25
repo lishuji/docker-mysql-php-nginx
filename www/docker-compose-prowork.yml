@@ -1,0 +1,78 @@
+version: '3.0'
+services:
+  php-fpm:
+    container_name: php-fpm
+    build:
+      context: ../services/php
+      args:
+          - PHP_VERSION=8.1-fpm
+          - COMPOSER_URL=https://mirrors.aliyun.com/composer/
+    ports:
+      - "9000:9000"
+    links:
+      - mysql-db:mysql-db
+      - redis-db:redis-db
+    volumes:
+      - ./app:/data/www:rw
+    networks:
+      - prowork
+    restart: always
+    command: php-fpm
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ../services/nginx
+      args:
+        - NGINX_VERSION=1.21
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    depends_on:
+      - php-fpm
+    links:
+      - php-fpm:php-fpm
+    volumes:
+      -  ./app:/data/www:rw
+      - ./public:/www/data:rw
+      - ../services/nginx/conf.d:/etc/nginx/conf.d:rw
+      - ../services/nginx/logs:/var/log/nginx:rw
+    networks:
+      - prowork
+    restart: always
+    command: nginx -g 'daemon off;'
+
+  mysql-db:
+    container_name: mysql-db
+    build:
+      context: ../services/mysql
+      args:
+        - MYSQL_VERSION=8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root # root密码 自行修改
+      MYSQL_DATABASE: prowork # 数据库名
+      MYSQL_USER: test # 子账号
+      MYSQL_PASSWORD: root # 子密码
+    networks:
+      - prowork
+    restart: always
+    command: "--character-set-server=utf8mb4"
+
+  redis-db:
+    container_name: redis-db
+    build:
+      context: ../services/redis
+      args:
+        - REDIS_VERSION=5
+    ports:
+      - "6379:6379"
+    networks:
+      - prowork
+    restart: always
+
+networks:
+  prowork:
+  # driver: bridge

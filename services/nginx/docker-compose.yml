@@ -1,19 +1,20 @@
 version: '3.0'
-
 services:
   nginx:
     container_name: docker-nginx
     build:
       context: ./
       dockerfile: Dockerfile
+      args:
+        - NGINX_VERSION=1.17
     restart: always
     ports:
       - "80:80"
       - "443:443"
       - "8080:8080"
     volumes:
-        - ../../www:/usr/share/nginx/html:rw
-        - ./configs/nginx/ngixn.conf:/etc/nginx/ngixn.conf
-        - ./configs/nginx/conf.d:/etc/nginx/conf.d
-        - ./logs/nginx:/var/log/nginx
+        - ../../www:/data/www:ro
+        - ./ngixn.conf:/etc/nginx/ngixn.conf:ro
+        - ./conf.d:/etc/nginx/conf.d:ro
+        - ./logs:/var/log/nginx
     command: nginx -g 'daemon off;'

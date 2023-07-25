@@ -6,13 +6,16 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+      args:
+          - PHP_VERSION=8.1-fpm
+          - COMPOSER_URL=https://mirrors.aliyun.com/composer/
     restart: always
     ports:
       - "9000:9000"
     volumes:
-      - ../../www:/var/www/html:rw
-      - ./configs/php.ini:/usr/local/etc/php/php.ini:rw
-      - ./configs/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw
-      - ./configs/www.conf:/usr/local/etc/php-fpm.d/www.conf:rw
-      - ./logs/php:/var/log/php:rm
+      - ../../www:/data/www:rw
+      - ./etc/php.ini:/usr/local/etc/php/php.ini:rw
+      - ./etc/php-fpm.conf:/usr/local/etc/php-fpm.conf:rw
+      - ./etc/www.conf:/usr/local/etc/php-fpm.d/www.conf:rw
+      - ./logs:/var/log/php:rm
     command: php-fpm -F
