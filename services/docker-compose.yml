@@ -3,26 +3,30 @@ services:
   php-fpm:
     container_name: php-fpm
     build:
-      context: ../services/php
+      context: php
       args:
-          - PHP_VERSION=8.1-fpm
-          - COMPOSER_URL=https://mirrors.aliyun.com/composer/
+        - PHP_VERSION=8.1-fpm
+        - COMPOSER_URL=https://mirrors.aliyun.com/composer/
     ports:
       - "9000:9000"
     links:
       - mysql-db:mysql-db
       - redis-db:redis-db
     volumes:
-      - /Users/likan/Work/php/git.code.tencent.com:/data/www:rw
+      - ../www:/data/www
+      - ../config/php/php.ini:/usr/local/etc/php/php.ini
+      - ../config/php/php-fpm.conf:/usr/local/etc/php-fpm.conf
+      - ../config/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ../logs/php:/var/log/php
     networks:
-      - prowork
+      - some-network
     restart: always
     command: php-fpm
 
   nginx:
     container_name: nginx
     build:
-      context: ../services/nginx
+      context: nginx
       args:
         - NGINX_VERSION=1.21
     ports:
@@ -34,44 +38,49 @@ services:
     links:
       - php-fpm:php-fpm
     volumes:
-      -  /Users/likan/Work/php/git.code.tencent.com:/data/www:rw
-      - ../services/nginx/conf.d:/etc/nginx/conf.d:rw
-      - ../services/nginx/logs:/var/log/nginx:rw
+      - ../www:/data/www:rw
+      - ../config/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ../config/nginx/conf.d:/etc/nginx/conf.d
+      - ../logs/nginx:/var/log/nginx
     networks:
-      - prowork
+      - some-network
     restart: always
     command: nginx -g 'daemon off;'
 
   mysql-db:
     container_name: mysql-db
     build:
-      context: ../services/mysql
+      context: mysql
       args:
         - MYSQL_VERSION=8.0
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root # root密码 自行修改
-      MYSQL_DATABASE: prowork # 数据库名
+      MYSQL_DATABASE: test # 数据库名
       MYSQL_USER: test # 子账号
       MYSQL_PASSWORD: root # 子密码
     networks:
-      - prowork
+      - some-network
     restart: always
     command: "--character-set-server=utf8mb4"
 
   redis-db:
     container_name: redis-db
     build:
-      context: ../services/redis
+      context: redis
       args:
         - REDIS_VERSION=5
     ports:
       - "6379:6379"
+    volumes:
+      - ../config/redis/redis.conf:/etc/redis.conf:ro
+      - ../data/redis:/data
+      - ../logs/redis:/var/log
     networks:
-      - prowork
+      - some-network
     restart: always
 
 networks:
-  prowork:
-  # driver: bridge
+  some-network:
+    driver: bridge

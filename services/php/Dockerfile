@@ -3,6 +3,8 @@ ARG COMPOSER_URL
 
 FROM php:${PHP_VERSION}
 
+WORKDIR /data/www
+
 # 设置时区
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -47,8 +49,5 @@ RUN docker-php-ext-enable mongodb amqp redis imagick
 
 # 安装 Composer
 ENV COMPOSER_HOME /root/composer
-
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 ENV PATH $COMPOSER_HOME/vendor/bin:$PATH
-
-WORKDIR /data/www

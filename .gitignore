@@ -5,8 +5,13 @@
 # PHPStorm
 .idea/
 
-data/
+data/mysql
+data/redis
+
 logs/mysql/
 logs/nginx/
+logs/php/
+logs/redis/
+
 www/app/
-!configs/nginx/conf.d/default.conf
+!config/nginx/conf.d/default.conf
