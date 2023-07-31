@@ -1,4 +1,4 @@
-version: '2'
+version: '3.0'
 
 networks:
   app-network: 
@@ -9,7 +9,7 @@ services:
     container_name: my_db
     restart: always
     ports:
-      - "3309:3306"
+      - "3306:3306"
     volumes:
       - ./data/mysql:/var/lib/mysql
       - ./logs/mysql:/var/log/mysql
@@ -18,16 +18,18 @@ services:
       - TZ=Asia/Shanghai
     networks:
       - app-network
+
   my_redis:
     image: redis
     container_name: my_redis
     restart: always
     ports:
-      - "6399:6379"
+      - "6379:6379"
     environment:
       - TZ=Asia/Shanghai
     networks:
       - app-network
+
   my_php:
     image: php:8.1-fpm
     container_name: my_php
@@ -43,20 +45,23 @@ services:
     environment:
       - TZ=Asia/Shanghai
     networks:
-      - app-network 
+      - app-network
+
   my_nginx:
     image: nginx
     container_name: my_nginx
     restart: always
     ports:
-      - "8899:80"
+      - "80:80"
+      - "8080:80"
+      - "443:443"
     links:
       - my_php:php
     volumes:
       - ./www:/usr/share/nginx/html
-      - ./configs/nginx/ngixn.conf:/etc/nginx/ngixn.conf
-      - ./configs/nginx/conf.d:/etc/nginx/conf.d
-      - ./logs/nginx:/var/log/nginx
+      - ./configs/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./configs/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./logs/nginx:/var/log/nginx:rw
     environment:
       - TZ=Asia/Shanghai
     networks:

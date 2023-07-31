@@ -13,7 +13,7 @@ services:
       - mysql-db:mysql-db
       - redis-db:redis-db
     volumes:
-      - ./app:/data/www:rw
+      - /Users/likan/Work/php/git.code.tencent.com:/data/www:rw
     networks:
       - prowork
     restart: always
@@ -34,8 +34,7 @@ services:
     links:
       - php-fpm:php-fpm
     volumes:
-      -  ./app:/data/www:rw
-      - ./public:/www/data:rw
+      -  /Users/likan/Work/php/git.code.tencent.com:/data/www:rw
       - ../services/nginx/conf.d:/etc/nginx/conf.d:rw
       - ../services/nginx/logs:/var/log/nginx:rw
     networks:

@@ -28,10 +28,10 @@ libonig-dev \
 supervisor
 
 #拷贝相关依赖
-ADD ./nginx-1.25.1.tar.gz /usr/local/src
-ADD ./php-8.1.21.tar.gz /usr/local/src
-ADD ./zlib-1.2.8.tar.gz /usr/local/src
-ADD ./pcre2-10.42.tar.gz /usr/local/src
+ADD package/nginx-1.25.1.tar.gz /usr/local/src
+ADD package/php-8.1.21.tar.gz /usr/local/src
+ADD package/zlib-1.2.8.tar.gz /usr/local/src
+ADD package/pcre2-10.42.tar.gz /usr/local/src
 
 #安装nginx依赖
 RUN cd /usr/local/src/zlib-1.2.8 && ./configure && make && make install
