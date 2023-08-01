@@ -55,6 +55,8 @@ services:
         - MYSQL_VERSION=8.0
     ports:
       - "3306:3306"
+    volumes:
+      - ../data/mysql:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root # root密码 自行修改
       MYSQL_DATABASE: test # 数据库名
